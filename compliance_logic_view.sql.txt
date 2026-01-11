@@ -1,0 +1,11 @@
+CREATE OR REPLACE VIEW v_compliance_alerts AS
+SELECT 
+    full_name,
+    CASE 
+        WHEN full_name IS NULL OR full_name = '' THEN 'Missing Name'
+        WHEN length(national_id) != 10 THEN 'NDMO Violation: Invalid ID'
+        WHEN privacy_notice_signed = FALSE THEN 'PDPL Violation: No Signature'
+        ELSE 'Review Required'
+    END AS alert_message
+FROM hr_governance_lab
+WHERE data_quality_status = 'Pending';

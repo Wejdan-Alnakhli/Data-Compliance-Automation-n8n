@@ -1,0 +1,98 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4113f518-4555-49d8-a225-c1096a67c08f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM v_compliance_alerts;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        208,
+        0
+      ],
+      "id": "9f517cc8-93da-4a50-bed1-e41f44067b75",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "jOx6o4H3eBMMTBE8",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "wejdan.alnakhli@gmail.com",
+        "toEmail": "wejdan.alnakhli@gmail.com",
+        "subject": "تنبيه امتثال",
+        "html": "=<p>الأستاذة المحترمة/ <b>{{ $json.full_name }}</b></p>\n<p>السلام عليكم ورحمة الله وبركاته،،</p>\n\n<p>نود إحاطتكم بوجود ملاحظة هامة في سجلات الامتثال الخاصة بكم:</p>\n<p style=\"background-color: #fff3cd; padding: 10px; border-left: 5px solid #ffc107;\">\n    ⚠️ نوع التنبيه: <b><span style=\"color: #856404;\">{{ $json.alert_message }}</span></b>\n</p>\n\n<p>نرجو منكم اتخاذ الإجراء اللازم فوراً لضمان التوافق مع سياسات <b>NDMO</b> و <b>PDPL</b>.</p>\n\n<hr>\n<p style=\"color: #6c757d; font-size: 12px;\">هذا إشعار آلي مرسل من نظام إدارة حوكمة البيانات.</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "a33eb1e0-a589-4aa8-96de-a1a2a86d0ff8",
+      "name": "Send email",
+      "webhookId": "cc4c58bd-10cd-4e77-9179-87b5fd10b355",
+      "credentials": {
+        "smtp": {
+          "id": "Tcj9iN9sBZKlDART",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "324ace0c-8eb2-4e9b-ad5a-55516c5a28c7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cce61d42d6b94c7e6970ab335a73e8b5e214b3504f63c3470d87519121773e50"
+  },
+  "id": "55gKoxltr-etBVb1W2jQr",
+  "tags": []
+}
